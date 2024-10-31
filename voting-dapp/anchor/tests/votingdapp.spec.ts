@@ -18,22 +18,28 @@ describe('votingdapp', () => {
 
   let context;
   let provider;
+  anchor.setProvider(anchor.AnchorProvider.env());
   let votingProgram: Program<Votingdapp>;
 
   beforeAll(async () => {
     // Start the Anchor testing environment and create the necessary context.
-    // This starts a test instance of the "votingdapp" program using the votingAddress.
     context = await startAnchor("", [{ name: "votingdapp", programId: votingAddress }], []);
-
+  
     // Set up a provider using BankrunProvider to interface with the Anchor environment
     provider = new BankrunProvider(context);
-
-    // Initialize the Votingdapp program with the IDL and provider to interact with its methods
+  
+    // Set the provider globally for Anchor
+    anchor.setProvider(provider);
+  
+    // Initialize the Votingdapp program with the IDL and program ID
     votingProgram = new Program<Votingdapp>(
       IDL,
-      provider,
+      provider
     );
-  })
+  });
+  
+  
+  
 
   it('initialize poll', async () => {
     // Call the `initializePoll` method on the votingProgram to create a new poll
